@@ -1,1 +1,9 @@
 .env
+.notes
+.ssh/
+
+backups-mysql/
+backups-wp/
+wp_content/
+
+*.sql
