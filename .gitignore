@@ -1,9 +1,10 @@
 .env
+.my.cnf
 .notes
 .ssh/
 
 backups-mysql/
 backups-wp/
-wp_content/
+_site/
 
 *.sql
