@@ -10,6 +10,9 @@ help:
 containers-down:
 	@./Make.sh _containers_down
 
+containers-restore:
+	@./Make.sh _containers_restore
+
 containers-stop:
 	@./Make.sh _containers_stop
 

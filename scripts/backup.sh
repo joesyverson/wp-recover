@@ -23,4 +23,5 @@ pushd ${SERVER_BACKUP_DIR}/wp/
 tar -czvf _site.gz $BACKUP_WP
 popd
 
+rm .my.cnf
 echo DONE

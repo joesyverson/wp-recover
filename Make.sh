@@ -5,6 +5,17 @@ _containers_down () {
     docker-compose down
 }
 
+_containers_restore () {
+    # sed -i "s/define( 'DB_HOST', 'localhost' );/define( 'DB_HOST', 'db' );/g" _site/wp-config.php
+    docker exec -i wp-recover_db_1 sh -c \
+        "exec mysql -u'${MYSQL_USER}' -p'${MYSQL_PASSWORD}' ${MYSQL_DATABASE}" < \
+        ./${MYSQL_DATABASE}.sql
+
+    docker cp scripts/search-replace.sh wp-recover_wordpress_1:/root
+    docker exec -it bash -c 'chmod +x /root/search-replace.sh && /root/search-replace.sh'
+
+}
+
 _containers_stop () {
     docker-compose stop
 }

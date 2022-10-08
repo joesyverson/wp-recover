@@ -7,14 +7,16 @@ services:
     image: wordpress
     restart: always
     ports:
-      - 8080:80
+    - 8080:80
     environment:
       WORDPRESS_DB_HOST: "${WORDPRESS_DB_HOST}"
+      wpdb: "${WORDPRESS_DB_HOST}"
       WORDPRESS_DB_USER: "${WORDPRESS_DB_USER}"
       WORDPRESS_DB_PASSWORD: "${WORDPRESS_DB_PASSWORD}"
       WORDPRESS_DB_NAME: "${WORDPRESS_DB_NAME}"
-    # volumes:
-    #   - wordpress:/var/www/html
+    volumes:
+    - ./_site/:/var/www/html/
+    # - wordpress:/var/www/html
 
   db:
     image: mysql:5.7
@@ -24,8 +26,8 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
-    # volumes:
-    #   - db:/var/lib/mysql
+  #   # volumes:
+  #   # - db:/var/lib/mysql
 
 # volumes:
 #   wordpress:
