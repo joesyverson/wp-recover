@@ -1,6 +1,8 @@
 SHELL := /bin/bash
 .PHONY: help
 
+VERSION='current'
+
 help:
 	@echo ""
 	@echo "help"
@@ -19,3 +21,6 @@ server-backup:
 
 server-shell:
 	@./Make.sh _server_shell
+
+stage:
+	@./Make.sh _stage $(VERSION)

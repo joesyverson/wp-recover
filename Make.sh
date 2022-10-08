@@ -19,10 +19,10 @@ _server_shell () {
 }
 
 _server_backup () {
-    DATE=$( date +'%Y-%m-%d_%H-%M' )
-    SERVER_BACKUP_CONF="${SERVER_HOME}/.my.cnf"
-    SERVER_BACKUP_DIR="${SERVER_HOME}/backups-manual/"
-    SERVER_BACKUP_SCRIPT="${SERVER_BACKUP_DIR}/backup.sh"
+    local DATE=$( date +'%Y-%m-%d_%H-%M' )
+    local SERVER_BACKUP_CONF="${SERVER_HOME}/.my.cnf"
+    local SERVER_BACKUP_DIR="${SERVER_HOME}/backups-manual/"
+    local SERVER_BACKUP_SCRIPT="${SERVER_BACKUP_DIR}/backup.sh"
 
     scp -i $SERVER_KEY ./.my.cnf \
         ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_CONF}
@@ -40,6 +40,22 @@ _server_backup () {
     scp -pri $SERVER_KEY \
         ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_DIR}/wp/_site.${DATE}.gz \
         ./backups-wp/_site.${DATE}.gz
+}
+
+_stage () {
+    local VERSION="$1"
+    if [ $VERSION = 'current' ]; then
+        WP_BACKUP="./backups-wp/$( ls -1t ./backups-wp/ | tail -1 )"
+        MYSQL_BACKUP="./backups-mysql/$( ls -1t ./backups-mysql/ | tail -1 )"
+    else
+        echo "This app can currently only stage the current version. Pass 'current' or stage manually."
+        exit
+        # WP_BACKUP="./backups-wp/${VERSON}"
+        # MYSQL_BACKUP="./backups-sql/${VERSON}"
+    fi
+    # warn the user they are about to delete their current stage
+    cp -p $MYSQL_BACKUP ./${MYSQL_DATABASE}.sql; cp -p $WP_BACKUP ./_site.gz
+    tar -xvf ./_site.gz
 }
 
 

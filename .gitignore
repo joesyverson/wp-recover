@@ -3,8 +3,11 @@
 .notes
 .ssh/
 
+assets/
 backups-mysql/
 backups-wp/
 _site/
+wordpress-docker/
 
 *.sql
+*.gz
