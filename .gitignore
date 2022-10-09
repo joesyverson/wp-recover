@@ -6,6 +6,7 @@
 assets/
 backups-mysql/
 backups-wp/
+mysql/
 _site/
 wordpress-docker/
 
