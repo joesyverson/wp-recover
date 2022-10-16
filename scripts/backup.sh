@@ -20,7 +20,7 @@ mysqldump -u $WORDPRESS_DB_USER $WORDPRESS_DB_NAME > \
 echo BACKUP Wordpress: $BACKUP_WP
 cp -pr ${SERVER_HOME}/public_html/_site $BACKUP_WP
 pushd ${SERVER_BACKUP_DIR}/wp/
-tar -czvf _site.gz $BACKUP_WP
+tar -czvf _site.tar.gz.${DATE} $BACKUP_WP
 popd
 
 rm .my.cnf
