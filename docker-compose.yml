@@ -1,20 +1,22 @@
 version: '3.1'
 
-# recommended defaults commented out
 services:
 
   wordpress:
     image: wordpress
     restart: always
     ports:
-      - 8080:80
+    - 80:80
     environment:
       WORDPRESS_DB_HOST: "${WORDPRESS_DB_HOST}"
+      # wpdb: "${WORDPRESS_DB_HOST}"
       WORDPRESS_DB_USER: "${WORDPRESS_DB_USER}"
       WORDPRESS_DB_PASSWORD: "${WORDPRESS_DB_PASSWORD}"
       WORDPRESS_DB_NAME: "${WORDPRESS_DB_NAME}"
-    # volumes:
-    #   - wordpress:/var/www/html
+    volumes:
+    - ./_site/wp-content:/var/www/html/wp-content
+    depends_on:
+    - db
 
   db:
     image: mysql:5.7
@@ -23,9 +25,21 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
-    # volumes:
-    #   - db:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      # MYSQL_RANDOM_ROOT_  PASSWORD: '1'
+    volumes:
+    - ./mysql/:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+    - 8080:80
+    depends_on:
+    - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
 # volumes:
 #   wordpress:
