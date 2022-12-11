@@ -6,7 +6,7 @@
 
 backups-mysql/
 backups-wp/
-docs/tutorials/*
+docs/tutorials/backup-and-stage/
 mysql/
 _site/
 

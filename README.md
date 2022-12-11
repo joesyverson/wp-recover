@@ -35,7 +35,7 @@ You need several of the list below to run this successfully. They're ignored fro
 - `.env`
 - `.my.cnf`
 - `.notes`
-- `_site`
+- `_site/`
 - `.ssh/`
 - `backups-mysql`
 - `backups-wp`
