@@ -29,14 +29,14 @@ services:
     volumes:
     - ./mysql/:/docker-entrypoint-initdb.d
 
-  phpmyadmin:
-    image: phpmyadmin
-    # restart: always
-    ports:
-    - 8080:80
-    depends_on:
-    - db
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+  # phpmyadmin:
+  #   image: phpmyadmin
+  #   # restart: always
+  #   ports:
+  #   - 8080:80
+  #   depends_on:
+  #   - db
+  #   environment:
+  #     PMA_HOST: db
+  #     MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 

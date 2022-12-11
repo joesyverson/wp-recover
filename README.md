@@ -12,6 +12,8 @@ The purpose of this project is to backup that Wordpress instance with all of its
 
 This will allow my friends to stage changes and upgrades, and give them more freedom to change providers if they choose.
 
+![General diagram of functionality](./docs/diagram/diagram.svg)
+
 ## Comments
 
 This project will use as few advanced tools as possible to maximize it's compatibility with Windows and Macintosh.
@@ -24,13 +26,20 @@ I may end up incorporating this procedure into other projects (with appropriate 
 
 - BASh
 - GNU Make
-- Docker
-- Docker Compose
+- Docker / Compose
 
-**Data:**
+**Ignored Data:**
+
+You need several of the list below to run this successfully. They're ignored from Git, so they must be given to you by someone who has the data if you intend to use the code in this repository successfully.
 
 - `.env`
+- `.my.cnf`
+- `.notes`
+- `_site`
 - `.ssh/`
+- `backups-mysql`
+- `backups-wp`
+
 
 Note: this has not been tested on Windows or Mac. Mac compatibility might require a few tweaks but I'm currently uncertain if Windows will work at all, even PowerShell, given the difference of path naming conventions.
 

@@ -2,13 +2,13 @@
 .my.cnf
 .notes
 .ssh/
+.~lock.diagram.odg#
 
-assets/
 backups-mysql/
 backups-wp/
+docs/tutorials/*
 mysql/
 _site/
-wordpress-docker/
 
 *.sql
 *.gz
