@@ -17,12 +17,21 @@ _containers_stage () {
         # MYSQL_BACKUP="./backups-sql/${VERSON}"
     fi
     # warn the user they are about to delete their current stage
-    rm -r ./_site/
-    rm mysql/*
+    sudo chown -R ${USER}:${USER} ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
+    sudo chown -R ${USER}:${USER} ./mysql/ 2> /dev/null
+    rm -rf ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
+    rm ./mysql/* 2> /dev/null
     
-    cp -p $MYSQL_BACKUP ./mysql/${MYSQL_DATABASE}.sql; cp -p $WP_BACKUP ./_site.gz
-    tar -xvf ./_site.gz
-    rm _site.gz
+    cp -p $MYSQL_BACKUP ./mysql/${MYSQL_DATABASE}.sql; cp -p $WP_BACKUP ./${SERVER_WP_CONTENT_DIR}.gz
+    tar -xvf ./${SERVER_WP_CONTENT_DIR}.gz
+
+    WP_BACKUP_EXPANDED_PATH="./${SERVER_HOME}/backups-manual/wp"
+    WP_BACKUP_EXPANDED=$( ls ${WP_BACKUP_EXPANDED_PATH} )
+
+    mv ${WP_BACKUP_EXPANDED_PATH}/${WP_BACKUP_EXPANDED} ./${SERVER_WP_CONTENT_DIR}
+    rm -rf ./${SERVER_HOME_PARENT} 2> /dev/null
+
+    rm ${SERVER_WP_CONTENT_DIR}.gz 2> /dev/null
 }
 
 _containers_stop () {
@@ -55,8 +64,8 @@ _server_shell () {
 
 _server_backup () {
     local DATE=$( date +'%Y-%m-%d_%H-%M' )
-    local SERVER_BACKUP_CONF="${SERVER_HOME}/.my.cnf"
-    local SERVER_BACKUP_DIR="${SERVER_HOME}/backups-manual"
+    local SERVER_BACKUP_CONF="/${SERVER_HOME}/.my.cnf"
+    local SERVER_BACKUP_DIR="/${SERVER_HOME}/backups-manual"
     local SERVER_BACKUP_SCRIPT="${SERVER_BACKUP_DIR}/backup.sh"
 
     scp -i $SERVER_KEY ./.my.cnf \
@@ -67,14 +76,14 @@ _server_backup () {
     ssh -i $SERVER_KEY ${SERVER_USER}@${SERVER_IP} \
         "chmod 0770 ${SERVER_BACKUP_SCRIPT} && chmod 660 ${SERVER_BACKUP_CONF}"
     ssh -i $SERVER_KEY ${SERVER_USER}@${SERVER_IP} \
-        "${SERVER_BACKUP_SCRIPT} ${DATE} ${SERVER_HOME} ${WORDPRESS_DB_USER} ${WORDPRESS_DB_NAME}"
+        "${SERVER_BACKUP_SCRIPT} ${DATE} ${SERVER_HOME} ${WORDPRESS_DB_USER} ${WORDPRESS_DB_NAME} ${SERVER_WP_CONTENT_DIR}"
 
     scp -pi $SERVER_KEY \
         ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_DIR}/mysql/${WORDPRESS_DB_NAME}.sql.${DATE} \
         ./backups-mysql/${WORDPRESS_DB_NAME}.sql.${DATE}
     scp -pri $SERVER_KEY \
-        ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_DIR}/wp/_site.tar.gz.${DATE} \
-        ./backups-wp/_site.tar.gz.${DATE}
+        ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_DIR}/wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${DATE} \
+        ./backups-wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${DATE}
 }
 
 _COMM="$1"

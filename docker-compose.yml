@@ -4,12 +4,11 @@ services:
 
   wordpress:
     image: wordpress
-    restart: always
+    # restart: always
     ports:
     - 80:80
     environment:
       WORDPRESS_DB_HOST: "${WORDPRESS_DB_HOST}"
-      # wpdb: "${WORDPRESS_DB_HOST}"
       WORDPRESS_DB_USER: "${WORDPRESS_DB_USER}"
       WORDPRESS_DB_PASSWORD: "${WORDPRESS_DB_PASSWORD}"
       WORDPRESS_DB_NAME: "${WORDPRESS_DB_NAME}"
@@ -20,7 +19,7 @@ services:
 
   db:
     image: mysql:5.7
-    restart: always
+    # restart: always
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
@@ -32,7 +31,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
+    # restart: always
     ports:
     - 8080:80
     depends_on:
@@ -41,6 +40,3 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
-# volumes:
-#   wordpress:
-#   db:
