@@ -41,7 +41,7 @@ You need several of the list below to run this successfully. They're ignored fro
 - `backups-wp`
 
 
-Note: this has not been tested on Windows or Mac. Mac compatibility might require a few tweaks but I'm currently uncertain if Windows will work at all, even PowerShell, given the difference of path naming conventions.
+**Note:** this has not been tested on Windows or Mac. Mac compatibility might require a few tweaks but I'm currently uncertain if Windows will work at all, even PowerShell, given the difference of path naming conventions.
 
 ## How to Use
 
@@ -72,3 +72,13 @@ make db-update-links
 ```
 
 To stop the containers without removing them: `make containers-stop`
+
+## Useability problem
+
+The traditional backup requires multiple SSH logins and the server has a password. It's annoying to sit and watch output just so that when the next login occurs, you're there to enter the server password again.
+
+- **Chosen solution:** this repository now contains an Ansible playbook and assets to log into the server without manual password input. **Drawback**: you have to install Ansible, an additional dependency.
+
+- **Alternate solution:** configure SSH to use automatically use the login password on connection attempt. **Forbidden:** SSH does not permit a password configuration option. An additional **drawback** would accompany this solution anyway: it would require changes to the user's computer and also move the organization's assets outide of the project directory.
+
+- **Alternate solution:** gather all remote assets into a directory and update the current back-up procedure to send all of them at once, update the remote paths to pair a complete backup (a WP and MySQL backup with the same timestamp), and retrieve the backups recursively. **Drawbacks:** This would involve the time-consuming task of changing and testing already-stable technology. It would also only reduce the amount of logins to three, not completely eliminate having to log in multiple times.
