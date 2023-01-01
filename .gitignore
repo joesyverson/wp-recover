@@ -8,6 +8,7 @@ backups-mysql/
 backups-wp/
 docs/tutorials/backup-and-stage/
 mysql/
+playbooks/.inventory.ini
 _site/
 
 *.sql

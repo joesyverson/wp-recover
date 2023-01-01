@@ -1,0 +1,50 @@
+---
+- hosts: SERVER
+  gather_facts: false
+  remote_user: "{{ SERVER_USER }}"
+  any_errors_fatal: yes
+  tasks:
+
+  - name: Debug
+    delegate_to: localhost
+    debug:
+      var: SERVER_BACKUP_SCRIPT
+
+  - name: Echo "Hello World"
+    # delegate_to: localhost
+    shell: echo "Hello World"
+
+  # Cannot use Syncronize module (RSync)
+  # Syncronize opens it's own SSH connection
+  # Requiring password reauth
+  - name: Copy MySQL config to host
+    copy:
+      src: ../.my.cnf
+      dest: "{{ SERVER_BACKUP_CONF }}"
+      mode: 0660
+
+  - name: Copy backup script to target
+    copy:
+      src: ../scripts/backup.sh
+      dest: "{{ SERVER_BACKUP_SCRIPT }}"
+      mode: 0770
+
+  - name: Run backup
+    shell: "{{ SERVER_BACKUP_SCRIPT }} {{ DATE }} {{ SERVER_HOME }} {{ WORDPRESS_DB_USER }} {{ WORDPRESS_DB_NAME }} {{ SERVER_WP_CONTENT_DIR }}"
+
+  - name: Get MySQL backup from server
+    fetch:
+      flat: yes
+      src: "{{ SERVER_BACKUP_DIR }}/mysql/{{ WORDPRESS_DB_NAME }}.sql.{{ DATE }}"
+      dest: "../backups-mysql/"
+  
+  - name: Get WP backup from server
+    fetch:
+      flat: yes
+      src: "{{ SERVER_BACKUP_DIR }}/wp/{{ SERVER_WP_CONTENT_DIR }}.tar.gz.{{ DATE }}"
+      dest: "../backups-wp/"
+
+  - name: Delete MySQL config
+    file:
+      path: "{{ SERVER_BACKUP_CONF }}"
+      state: absent

@@ -1,6 +1,25 @@
 #!/bin/bash
 source .env
 
+_ansible_backup () {
+    local DATE=$( date +'%Y-%m-%d_%H-%M' )
+    local SERVER_BACKUP_CONF="/${SERVER_HOME}/.my.cnf"
+    local SERVER_BACKUP_DIR="/${SERVER_HOME}/backups-manual"
+    local SERVER_BACKUP_SCRIPT="${SERVER_BACKUP_DIR}/backup.sh"
+
+    ansible-playbook -vi ./playbooks/.inventory.ini \
+        --extra-vars "SERVER_USER=${SERVER_USER}" \
+        --extra-vars "SERVER_BACKUP_CONF=${SERVER_BACKUP_CONF}" \
+        --extra-vars "SERVER_BACKUP_DIR=${SERVER_BACKUP_DIR}" \
+        --extra-vars "SERVER_BACKUP_SCRIPT=${SERVER_BACKUP_SCRIPT}" \
+        --extra-vars "DATE=${DATE}" \
+        --extra-vars "SERVER_HOME=${SERVER_HOME}" \
+        --extra-vars "WORDPRESS_DB_USER=${WORDPRESS_DB_USER}" \
+        --extra-vars "WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}" \
+        --extra-vars "SERVER_WP_CONTENT_DIR=${SERVER_WP_CONTENT_DIR}" \
+        ./playbooks/server-backup.yml
+}
+
 _containers_down () {
     docker-compose down
 }
@@ -16,7 +35,7 @@ _containers_stage () {
         # WP_BACKUP="./backups-wp/${VERSON}"
         # MYSQL_BACKUP="./backups-sql/${VERSON}"
     fi
-    # warn the user they are about to delete their current stage
+    echo 'Enter your password to make old container data deletable. Press [Ctrl]C to quit.'
     sudo chown -R ${USER}:${USER} ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
     sudo chown -R ${USER}:${USER} ./mysql/ 2> /dev/null
     rm -rf ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
