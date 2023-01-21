@@ -2,6 +2,7 @@ SHELL := /bin/bash
 .PHONY: help
 
 VERSION='current'
+FMT='dates'
 
 help:
 	@echo ""
@@ -15,6 +16,7 @@ help:
 	@echo "init                      Make some ignored directories required for this implementation"
 	@echo "server-backup             Make a backup using SSH"
 	@echo "server-shell              Log into the server's shell"
+	@echo "versions-print FMT        Print available backups to use"
 
 ansible-backup:
 	@./Make.sh _ansible_backup
@@ -42,3 +44,6 @@ server-backup:
 
 server-shell:
 	@./Make.sh _server_shell
+
+versions-print:
+	@./Make.sh _versions_print $(FMT)

@@ -27,13 +27,13 @@ _containers_down () {
 _containers_stage () {
     local VERSION="$1"
     if [ $VERSION = 'current' ]; then
-        WP_BACKUP="./backups-wp/$( ls -1t ./backups-wp/ | tail -1 )"
-        MYSQL_BACKUP="./backups-mysql/$( ls -1t ./backups-mysql/ | tail -1 )"
+        # Linux will list the files alphanumerically
+        # So no additional sort or property-lookup required
+        WP_BACKUP="./backups-wp/$( ls -1 ./backups-wp/ | tail -1 )"
+        MYSQL_BACKUP="./backups-mysql/$( ls -1 ./backups-mysql/ | tail -1 )"
     else
-        echo "This app can currently only stage the current version. Pass 'current' or stage manually."
-        exit
-        # WP_BACKUP="./backups-wp/${VERSON}"
-        # MYSQL_BACKUP="./backups-sql/${VERSON}"
+        WP_BACKUP="./backups-wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${VERSION}"
+        MYSQL_BACKUP="./backups-sql/${WORDPRESS_DB_NAME}.sql.${VERSION}"
     fi
     echo 'Enter your password to make old container data deletable. Press [Ctrl]C to quit.'
     sudo chown -R ${USER}:${USER} ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
@@ -103,6 +103,19 @@ _server_backup () {
     scp -pri $SERVER_KEY \
         ${SERVER_USER}@${SERVER_IP}:${SERVER_BACKUP_DIR}/wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${DATE} \
         ./backups-wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${DATE}
+}
+
+_versions_print () {
+    local _ARG="$1"
+    local _DEFAULT='dates'
+    if [ -z "$_ARG" ]; then _ARG="$_DEFAULT"; fi
+    local _BACKUPS_SQL=$( ls backups-mysql ); local _BACKUPS_WP=$( ls backups-wp )
+    local _FILES=$(paste <( echo "${_BACKUPS_SQL}" ) <( echo "${_BACKUPS_WP}" ))
+    if [ "$_ARG" = 'files' ]
+        then echo "$_FILES"
+    elif [ "$_ARG" = 'dates' ]
+        then echo "$_FILES" | awk '{print $1}' | cut -d '.' -f 3
+    fi
 }
 
 _COMM="$1"
