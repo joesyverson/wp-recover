@@ -15,7 +15,7 @@
     shell: echo "Hello World"
 
   # Cannot use Syncronize module (RSync)
-  # Syncronize opens it's own SSH connection
+  # Syncronize opens its own SSH connection
   # Requiring password reauth
   - name: Copy MySQL config to host
     copy:

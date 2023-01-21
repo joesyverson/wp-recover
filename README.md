@@ -71,7 +71,20 @@ make containers-stage
 make db-update-links
 ```
 
-To stop the containers without removing them: `make containers-stop`
+To stop the containers without removing them: `make containers-stop`.
+
+### Restoring other versions
+
+You can specify an alternative backup with `make containers-stage`. First, figure out what backup you want to restore by running `make versions-list`. It will output timestamps like so:
+
+```
+2022-12-11_15-53
+2023-01-01_16-39
+2023-01-01_16-58
+2023-01-01_17-09
+```
+
+Decide the date of the backup you want to use and pass it to `make containers-stage`. For example: `make containers-stage VERSION=2023-01-01_16-58`.
 
 ## Useability problem
 
