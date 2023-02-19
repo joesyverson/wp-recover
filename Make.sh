@@ -33,7 +33,7 @@ _containers_stage () {
         MYSQL_BACKUP="./backups-mysql/$( ls -1 ./backups-mysql/ | tail -1 )"
     else
         WP_BACKUP="./backups-wp/${SERVER_WP_CONTENT_DIR}.tar.gz.${VERSION}"
-        MYSQL_BACKUP="./backups-sql/${WORDPRESS_DB_NAME}.sql.${VERSION}"
+        MYSQL_BACKUP="./backups-mysql/${WORDPRESS_DB_NAME}.sql.${VERSION}"
     fi
     echo 'Enter your password to make old container data deletable. Press [Ctrl]C to quit.'
     sudo chown -R ${USER}:${USER} ./${SERVER_WP_CONTENT_DIR}/ 2> /dev/null
@@ -43,14 +43,10 @@ _containers_stage () {
     
     cp -p $MYSQL_BACKUP ./mysql/${MYSQL_DATABASE}.sql; cp -p $WP_BACKUP ./${SERVER_WP_CONTENT_DIR}.gz
     tar -xvf ./${SERVER_WP_CONTENT_DIR}.gz
+    rm *.gz
 
-    WP_BACKUP_EXPANDED_PATH="./${SERVER_HOME}/backups-manual/wp"
-    WP_BACKUP_EXPANDED=$( ls ${WP_BACKUP_EXPANDED_PATH} )
-
-    mv ${WP_BACKUP_EXPANDED_PATH}/${WP_BACKUP_EXPANDED} ./${SERVER_WP_CONTENT_DIR}
-    rm -rf ./${SERVER_HOME_PARENT} 2> /dev/null
-
-    rm ${SERVER_WP_CONTENT_DIR}.gz 2> /dev/null
+    WP_BACKUP=$( ls | grep 'site\.[0-9]*' )
+    mv $WP_BACKUP $SERVER_WP_CONTENT_DIR  
 }
 
 _containers_stop () {
