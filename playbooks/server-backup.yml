@@ -48,3 +48,4 @@
     file:
       path: "{{ SERVER_BACKUP_CONF }}"
       state: absent
+
