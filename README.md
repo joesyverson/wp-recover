@@ -28,6 +28,13 @@ I may end up incorporating this procedure into other projects (with appropriate 
 - GNU Make
 - Docker / Compose
 
+*Run the following commands to grant your user access to the* `docker` *command (Linux, Mac):*
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
 **Ignored Data:**
 
 You need several of the list below to run this successfully. They're ignored from Git, so they must be given to you by someone who has the data if you intend to use the code in this repository successfully.
@@ -37,9 +44,8 @@ You need several of the list below to run this successfully. They're ignored fro
 - `.notes`
 - `_site/`
 - `.ssh/`
-- `backups-mysql`
-- `backups-wp`
-
+- `backups-mysql/`
+- `backups-wp/`
 
 **Note:** this has not been tested on Windows or Mac. Mac compatibility might require a few tweaks but I'm currently uncertain if Windows will work at all, even PowerShell, given the difference of path naming conventions.
 

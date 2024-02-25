@@ -1,15 +1,26 @@
 .env
 .my.cnf
 .notes
-.ssh/
 .~lock.diagram.odg#
 
-backups-mysql/
-backups-wp/
+.ssh/*
+!.ssh/.gitkeep
+
+backups-mysql/*
+!backups-mysql/.gitkeep
+
+backups-wp/*
+!backups-wp/.gitkeep
+
+mysql/*
+!mysql/.gitkeep
+
+_site/*
+!_site/.gitkeep
+
 docs/tutorials/*
-mysql/
 playbooks/.inventory.ini
-_site/
 
 *.sql
 *.gz
+
